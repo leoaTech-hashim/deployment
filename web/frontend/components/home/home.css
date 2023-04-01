@@ -1,0 +1,90 @@
+.home-container {
+  margin-top: 15px;
+  width: 100%;
+  /* min-width: calc(100vw - 250px); */
+  padding: 15px 40px;
+  overflow: auto;
+  /* overflow: hidden; */
+}
+
+.summary-blocks {
+  margin-left: 2px;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.single-chart {
+  max-width: 90%;
+  margin-left: 1.1%;
+}
+
+.dual-charts {
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.dual-charts div.chart {
+  width: 44%;
+  margin: 15px 1%;
+}
+
+@media screen and (max-width: 1480px) {
+  .home-container {
+    padding: 15px 10px;
+  }
+
+  .summary-blocks {
+    margin-left: 4px;
+  }
+
+  .single-chart {
+    margin-left: 1%;
+  }
+
+  .dual-charts div.chart {
+    margin: 15px 0.9%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .home-container {
+    padding: 5px 10px;
+    margin-top: 15px;
+    margin-bottom: 50px;
+  }
+  .summary-blocks {
+    margin-left: 15px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .single-chart {
+    max-width: 98%;
+    margin-left: 0;
+  }
+  .dual-charts div.chart {
+    width: 100%;
+    margin: 20px 2%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .home-container {
+    padding: 0px;
+    margin-bottom: 50px;
+  }
+  .summary-blocks {
+    margin-left: 0px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 13px;
+  }
+
+  .dual-charts {
+    max-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

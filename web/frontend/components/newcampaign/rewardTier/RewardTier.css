@@ -1,0 +1,126 @@
+.reward-title {
+  display: flex;
+  gap: 20px;
+}
+
+.reward-title h2 {
+  font-size: 28px;
+  font-weight: 300;
+  margin-bottom: 30px;
+}
+
+.reward-form {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.reward-form .inputfield {
+  display: flex;
+  flex-direction: column;
+}
+
+.reward-content .inputfield label {
+  font-size: 18px;
+}
+
+.small-inputfield {
+  height: 60px;
+  width: 75px;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 28px;
+  font-weight: 700;
+  background-color: #ebf0f2;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+.large-field {
+  height: 60px;
+  padding: 10px;
+  font-size: 28px;
+  border-radius: 10px;
+  font-weight: 700;
+  width: 150px !important;
+  background-color: #ebf0f2;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+@media screen and (max-width: 1480px) {
+  .small-inputfield {
+    height: 55px;
+    width: 140px;
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .large-field {
+    font-size: 23px;
+    width: 140px !important;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .reward-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    gap:10px;
+  }
+
+  .reward-form .inputfield {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .small-inputfield {
+    height: 55px;
+    width: 130px;
+    font-size: 23px;
+    font-weight: 700;
+  }
+  .large-field {
+    font-size: 23px;
+    width: 130px !important;
+  }
+}
+
+@media screen and (max-width: 786px) {
+  .reward-form {
+    display: flex;
+  }
+
+  .reward-form .inputfield {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .reward-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .reward-form .inputfield {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .small-inputfield {
+    height: 55px;
+    padding: 13px;
+    background-color: #e4e4e4;
+  }
+}

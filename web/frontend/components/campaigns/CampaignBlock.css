@@ -1,0 +1,222 @@
+.campaign-block {
+  width: 94%;
+  background: var(--sidebar-bg-color);
+  border: 1px solid #fff;
+  box-shadow: 0px 4px 4px rgb(0 0 0 / 15%);
+  border-radius: 10px;
+  margin: 28px 14px;
+  padding: 11px 20px;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+.camapign-block-name {
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 35px;
+  color: #fff;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.campaign-block-product-name {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  text-decoration-line: underline;
+  color: #d8d4d6;
+}
+
+.campaign-block-duration {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #8b8a8a;
+}
+.campaign-right-card {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+.campaign-kpis {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.campaign-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  flex-direction: column;
+}
+
+.campaign-actions div span {
+  display: none;
+}
+
+.clicks-icon {
+  width: 33px;
+  height: 31px;
+}
+.revenue-icon {
+  width: 43px;
+  height: 46px;
+}
+
+.referral-icon {
+  width: 37px;
+  height: 46px;
+}
+
+.campaign-icon {
+  width: 55px;
+  height: 62px;
+}
+
+@media only screen and (max-width: 900px) {
+  .campaign-block {
+    display: flex;
+    margin: 20px 11px;
+    padding: 11px 15px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .campaign-details {
+    margin-bottom: 14px;
+  }
+
+  .campaign-actions {
+    display: flex;
+    margin-bottom: 5px;
+  }
+
+  .campaign-actions div {
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  /* .campaign-right-card {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20px;
+    align-items: center;
+  } */
+
+  .campaign-details {
+    margin-bottom: 14px;
+  }
+  .campaign-right-card {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .campaign-kpis {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .campaign-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 12rem;
+  }
+
+  .campaign-actions div {
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .campaign-actions div a {
+    display: flex;
+  }
+
+  .campaign-actions div span {
+    display: block;
+  }
+
+  .revenue-icon {
+    width: 33px;
+    height: 36px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .campaign-block {
+    display: flex;
+    margin: 20px 11px;
+    padding: 11px 15px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .campaign-details {
+    margin-bottom: 14px;
+  }
+
+  .campaign-right-card {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .campaign-kpis {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .campaign-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 8rem;
+  }
+
+  .campaign-actions div {
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Summmary cards icons */
+  .campaign-icon {
+    width: 39px;
+    height: 38px;
+  }
+  .clicks-icon {
+    width: 30px;
+    height: 31px;
+  }
+  .revenue-icon {
+    width: 33px;
+    height: 36px;
+  }
+
+  .referral-icon {
+    width: 30px;
+    height: 40px;
+  }
+}

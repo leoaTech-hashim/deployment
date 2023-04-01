@@ -1,0 +1,348 @@
+<script>
+  let second_page_settings = {{ block.settings | json }};
+  console.log(second_page_settings);
+
+  let urlParams = new URL(window.location.href).searchParams;
+  let user_code = urlParams.get('referralCode');
+  console.log(user_code);
+
+  window.onload = (e) => {
+    var copyCode = document.getElementById('code');
+
+    let urlredirect = window.location.href;
+    urlredirect = urlredirect.split('/pages')[0];
+    urlredirect = urlredirect + '/pages/' + second_page_settings.page + '?refer=' + user_code;
+    console.log(urlredirect);
+
+    copyCode.value = urlredirect;
+    copyCode.innerHTML = urlredirect;
+
+    var el = document.querySelector('.product-prelaunch-second-page');
+    el.parentElement.style.padding = '0';
+    el.parentElement.style.margin = '0';
+    if (second_page_settings.show_header_footer == false) {
+      var node,
+        nodes = [];
+
+      do {
+        var parent = el.parentNode;
+
+        // Collect element children
+        for (var i = 0, iLen = parent.childNodes.length; i < iLen; i++) {
+          node = parent.childNodes[i];
+
+          // Collect only sibling nodes that are elements and not the current element
+          if (node.nodeType == 1 && node != el) {
+            nodes.push(node);
+          }
+        }
+
+        // Go up to parent
+        el = parent;
+
+        // Stop when processed the body's child nodes
+      } while (el.tagName.toLowerCase() != 'body');
+
+      // Hide the collected nodes
+      nodes.forEach(function(node) {
+        node.style.display = 'none';
+      });
+    }
+
+    let second_image_background = 'https:' + second_page_settings.background;
+    console.log(second_image_background);
+    console.log(second_page_settings.background_color + ',url(' + second_image_background + ')');{% comment %}if (second_page_settings.background) {
+        document.getElementById('second-background-image').style.backgroundImage = url(' + second_image_background + ');
+      } else {
+        document.getElementById('second-background-image').style.backgroundImage = second_page_settings.background_color;
+
+      }
+    {% endcomment %}
+
+    document.getElementById('second-background-image').style.backgroundImage = second_page_settings.background_color + ',url(' + second_image_background + ')';
+  }
+</script>
+
+<style>
+  .product-prelaunch-second-page {
+    display: block !important;
+    width: 100vw;
+  }
+  .preheader_text {
+    color: {{ block.settings.accent_color }}
+    ;
+    font-size: {{ block.settings.base_font_size}}px;
+    font-weight: 800;
+    padding: 0 2%;
+  }
+  .header_text {
+    color: {{ block.settings.accent_color }}
+    ;
+    font-size: {{ block.settings.base_font_size | times: 3 }}px;
+    font-weight: 800;
+    padding: 0 2%;
+  }
+  .subheader_text {
+    color: {{ block.settings.accent_color }}
+    ;
+    font-size: {{ block.settings.base_font_size }}px;
+    font-weight: 500;
+    padding: 0 2%;
+  }
+  .referral-link-inp {
+    background-color: #D9D9D9;
+  }
+  input[value] {
+    color: {{ block.settings.accent_color }}
+    ;
+  }
+  .copy-link-btn {
+    border: 1px solid{{ block.settings.accent_color }};
+    background-color: {{ block.settings.main_color }}
+    ;
+    color: {{ block.settings.accent_color }}
+    ;
+  }
+  .img-layout {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    {% if block.settings.text_layout == 'left' %}
+      align-items: flex-start;
+      padding: 4vw;
+    {% elsif block.settings.text_layout == 'right' %}
+      align-items: flex-end;
+      padding: 4vw;
+    {% else %}
+      align-items: center;
+    {% endif %}
+  }
+  .gift-layout {
+    background-color: {{ block.settings.main_color }}
+    ;
+  }
+  .friends-joined {
+    color: {{ block.settings.accent_color }}
+    ;
+  }
+  .timeline-headers {
+    color: {{ block.settings.main_color }}
+    ;
+  }
+  .vertical-timeline-headers {
+    color: {{ block.settings.main_color }}
+    ;
+  }
+  .reward-target {
+    border: 1px solid{{ block.settings.accent_color }};
+    background-color: {{ block.settings.main_color }}
+    ;
+    color: {{ block.settings.accent_color }}
+    ;
+  }
+  .vertical-reward-target {
+    border: 1px solid{{ block.settings.accent_color }};
+    background-color: {{ block.settings.main_color }}
+    ;
+    color: {{ block.settings.accent_color }}
+    ;
+  }
+  .referral-count-achieved {
+    background-color: {{ block.settings.accent_color }}
+    ;
+    color: {{ block.settings.main_color }}
+    ;
+  }
+  .vertical-referral-count-achieved {
+    background-color: {{ block.settings.accent_color }}
+    ;
+    color: {{ block.settings.main_color }}
+    ;
+  }
+  .reward-item-detail span {
+    color: {{ block.settings.accent_color }}
+    ;
+  }
+  svg > path {
+    fill: {{ block.settings.main_color }}
+     !important;
+  }
+</style>
+
+{% render "second_page" %}
+
+{% schema %}
+  {
+    "name": "PreLauncher Second Page",
+    "target": "section",
+    "templates": ["page"],
+    "class": "product-prelaunch-second-page",
+    "stylesheet": "second_page.css",
+    "javascript": "second-page.js",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_header_footer",
+        "label": "Show Header & Footer",
+        "default": true
+      },
+      {
+        "type": "color_background",
+        "id": "background_color",
+        "label": "Background Overlay",
+        "default": "linear-gradient(#ffffff, #000000)"
+      },
+      {
+        "label": "Main Color",
+        "id": "main_color",
+        "type": "color",
+        "default": "#000000"
+      },
+      {
+        "label": "Accent Color",
+        "id": "accent_color",
+        "type": "color",
+        "default": "#ffffff"
+      }, {
+        "type": "select",
+        "id": "layout",
+        "label": "Screen Divider",
+        "options": [
+          {
+            "value": "nonehorizontal",
+            "label": "None-Horizontal"
+          }, {
+            "value": "nonevertical",
+            "label": "None-Vertical"
+          }, {
+            "value": "horizontal",
+            "label": "Horizontal"
+          }, {
+            "value": "vertical",
+            "label": "Vertical"
+          }
+        ],
+        "default": "horizontal"
+      }, {
+        "label": "Background Image",
+        "id": "background",
+        "type": "image_picker"
+      }, {
+        "label": "Pre-Header",
+        "id": "preheader_text",
+        "type": "text",
+        "default": "This is PreHeader Text"
+      }, {
+        "label": "Header",
+        "id": "header_text",
+        "type": "text",
+        "default": "This is Header Text"
+      }, {
+        "label": "Sub Header",
+        "id": "subheader_text",
+        "type": "text",
+        "default": "This is SubHeader Text"
+      }, {
+        "label": "Text Base Font Size",
+        "id": "base_font_size",
+        "type": "range",
+        "min": 24,
+        "max": 48,
+        "step": 1,
+        "unit": "px",
+        "default": 24
+      }, {
+        "type": "select",
+        "id": "text_layout",
+        "label": "Text Layout",
+        "options": [
+          {
+            "value": "center",
+            "label": "Center"
+          }, {
+            "value": "left",
+            "label": "Left"
+          }, {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "center"
+      }, {
+        "label": "Select Referral Icon",
+        "id": "icon_dropdown",
+        "type": "select",
+        "options": [
+          {
+            "value": "icon-1",
+            "label": "Icon 1",
+            "group": "Icon"
+          },
+          {
+            "value": "icon-2",
+            "label": "Icon 2",
+            "group": "Icon"
+          },
+          {
+            "value": "icon-3",
+            "label": "Icon 3",
+            "group": "Icon"
+          },
+          {
+            "value": "icon-4",
+            "label": "Icon 4",
+            "group": "Icon"
+          }, {
+            "value": "icon-5",
+            "label": "Icon 5",
+            "group": "Icon"
+          }, {
+            "value": "icon-6",
+            "label": "Icon 6",
+            "group": "Icon"
+          }, {
+            "value": "icon-7",
+            "label": "Icon 7",
+            "group": "Icon"
+          }, {
+            "value": "image-1",
+            "label": "Image 1",
+            "group": "Image"
+          }, {
+            "value": "image-2",
+            "label": "Image 2",
+            "group": "Image"
+          }, {
+            "value": "image-3",
+            "label": "Image 3",
+            "group": "Image"
+          }, {
+            "value": "image-4",
+            "label": "Image 4",
+            "group": "Image"
+          }, {
+            "value": "image-5",
+            "label": "Image 5",
+            "group": "Image"
+          }, {
+            "value": "image-7",
+            "label": "Image 6",
+            "group": "Image"
+          }, {
+            "value": "image-9",
+            "label": "Image 7",
+            "group": "Image"
+          }
+        ],
+        "default": "icon-1"
+      }, {
+        "type": "page",
+        "id": "page",
+        "label": "Link to Page"
+      }
+    ]
+  }
+{% endschema %}

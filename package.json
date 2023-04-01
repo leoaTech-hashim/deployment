@@ -1,0 +1,32 @@
+{
+  "name": "xychros-product-pre-launcher",
+  "version": "1.0.0",
+  "main": "web/index.js",
+  "engines": {
+    "node": "16.16.0",
+    "npm": "8.11.0"
+  },
+  "license": "UNLICENSED",
+  "scripts": {
+    "shopify": "shopify",
+    "build": "shopify app build",
+    "dev": "shopify app dev",
+    "info": "shopify app info",
+    "generate": "shopify app generate",
+    "deploy": "shopify app deploy",
+    "heroku-postbuild": "npm install --only=dev && npm install && npm run build"
+  },
+  "dependencies": {
+    "@shopify/app": "^3.20.1",
+    "@shopify/cli": "^3.20.1",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "crypto": "^1.0.1",
+    "deep-email-validator": "^0.1.21",
+    "dotenv": "^16.0.3",
+    "nodemailer": "^6.9.1",
+    "pg": "^8.8.0",
+    "query-string": "^7.1.1"
+  },
+  "author": "sughr"
+}

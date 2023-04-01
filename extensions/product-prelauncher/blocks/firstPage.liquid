@@ -1,0 +1,363 @@
+<script>
+  let first_page_settings = {{ block.settings | json }};
+  window.onload = (e) => {
+    var el = document.querySelector('.product-prelaunch');
+    el.parentElement.style.padding = '0';
+    el.parentElement.style.margin = '0';
+    {% if block.settings.show_header_footer == false %}
+      var node,
+      nodes = [];
+      
+      do {
+          var parent = el.parentNode;
+
+          // Collect element children
+          for (var i = 0, iLen = parent.childNodes.length; i < iLen; i++) {
+            node = parent.childNodes[i];
+
+            // Collect only sibling nodes that are elements and not the current element
+            if (node.nodeType == 1 && node != el) {
+              nodes.push(node);
+            }
+          }
+
+          // Go up to parent
+          el = parent;
+          
+          // Stop when processed the body's child nodes
+        } while (el.tagName.toLowerCase() != 'body');
+        
+        // Hide the collected nodes
+        nodes.forEach(function(node) {
+          node.style.display = 'none';
+        });
+        
+    {% endif %}
+
+
+    let urlredirect = window.location.href;
+    urlredirect = urlredirect.split('/pages')[0];
+
+    let image_background = 'https:' + first_page_settings.background;
+    console.log(image_background);
+    document.getElementById('background-image').style.backgroundImage = first_page_settings.background_color  + ',url(' + image_background + ')';
+
+
+    var form = document.getElementById('form-submission'),
+    actionPath = '',
+    formData = null;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      let urlParams = new URL(window.location.href).searchParams;
+      let referrerID = urlParams.get('refer');
+      formData = new URLSearchParams(new FormData(form)).toString() + '&refer=' + referrerID + '&campaign=' + first_page_settings.campaign_name;
+      actionPath = form.getAttribute('action') + '?' + formData;
+
+      const fetchOptions = {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        data: formData,
+        redirect: 'follow'
+      };
+
+      const response = await fetch(actionPath, fetchOptions);
+
+      const data = await response.json();
+
+      console.log(response.status);
+
+      if (response.status == '400') {
+        showSnackbar("snackbar");
+      } else if (response.status == '307') {
+        window.location.href = urlredirect + '/pages/' + first_page_settings.page + '?referralCode=' + data.referral;
+      } else {
+        showSnackbar("snackbar2");
+      }
+
+      return;
+    });
+
+    function showSnackbar(id) {
+      var snackBar = document.getElementById(id);
+
+      snackBar.className = "show-bar";
+      setTimeout(function() {
+        snackBar.className = snackBar.className.replace("show-bar", "");
+      }, 5000);
+    }
+  }
+</script>
+
+<style>
+  .product-prelaunch {
+    display: block !important;
+    width: 100vw;
+  }
+  .section-layout {
+
+    width: 100vw;
+  }
+  .submit-button {
+    font-size: 1em;
+    color: {{ block.settings.accent_color }}
+    ;
+    background: {{ block.settings.main_color }}
+    ;
+    border: 1px solid{{ block.settings.accent_color}};
+  }
+  .subheader_text {
+    color: {{ block.settings.accent_color }}
+    ;
+    font-size: {{ block.settings.base_font_size}}px;
+    font-weight: 400;
+    padding: 0 3%;
+    text-align: center;
+  }
+  .header_text {
+    color: {{ block.settings.accent_color }}
+    ;
+    font-size: {{ block.settings.base_font_size | times: 3}}px;
+    font-weight: 800;
+    padding: 0 2%;
+    text-align: center;
+  }
+  .tag-line {
+
+    color: {{ block.settings.accent_color }};
+    font-size: {{ block.settings.base_font_size}}px;
+    font-weight: 600;
+    margin: 10px auto;
+    padding: 0 2%;
+    text-align: center;
+  }
+  .text-layout {
+    background-color: {{ block.settings.main_color }}
+    ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .img-layout {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    {% if block.settings.text_layout == 'left' %}
+      align-items: flex-start;
+    {% elsif block.settings.text_layout == 'right' %}
+      align-items: flex-end;
+    {% else %}
+      align-items: center;
+    {% endif %}
+  }
+  .none-layout {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .none-layout .header_text {
+    margin-bottom: 10rem;
+  }
+  @media screen and (max-width: 767px) {
+    .header_text {
+      font-size: {{ block.settings.base_font_size|times: 1}}px;
+    }
+    .subheader_text {
+      font-size: {{ block.settings.base_font_size|times: 0.9}}px;
+    }
+    .tag-line {
+      font-size: {{ block.settings.base_font_size|times: 0.75}}px;
+    }
+  }
+  @media only screen and (min-width: 768px) and (max-width: 991px) {
+    .header_text {
+      font-size: {{ block.settings.base_font_size|times: 1.3}}px;
+    }
+    .subheader_text {
+      font-size: {{ block.settings.base_font_size}}px;
+    }
+    .tag-line {
+      font-size: {{ block.settings.base_font_size|times: 0.9}}px;
+    }
+  }
+  @media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .header_text {
+      font-size: {{ block.settings.base_font_size|times: 1.5}}px;
+    }
+    .subheader_text {
+      font-size: {{ block.settings.base_font_size|times: 1.2}}px;
+    }
+    .tag-line {
+      font-size: {{ block.settings.base_font_size|times: 1}}px;
+    }
+  }
+  @media only screen and (min-width: 1200px) {
+    .header_text {
+      font-size: {{ block.settings.base_font_size|times: 2}}px;
+    }
+    .subheader_text {
+      font-size: {{ block.settings.base_font_size|times: 1.8}}px;
+    }
+    .tag-line {
+      font-size: {{ block.settings.base_font_size|times: 1.5}}px;
+    }
+  }
+</style>
+
+{% render "first_page" %}
+
+{% schema %}
+  {
+    "name": "PreLauncher First Page",
+    "target": "section",
+    "stylesheet": "first_page.css",
+    "templates": ["page"],
+    "class": "product-prelaunch",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_header_footer",
+        "label": "Show Header & Footer",
+        "default": true
+      }, {
+        "type": "color_background",
+        "id": "background_color",
+        "label": "Background Overlay",
+        "default": "linear-gradient(#ffffff, #000000)"
+      }, {
+        "label": "Main Color",
+        "id": "main_color",
+        "type": "color",
+        "default": "#000000"
+      }, {
+        "label": "Accent Color",
+        "id": "accent_color",
+        "type": "color",
+        "default": "#ffffff"
+      }, {
+        "type": "select",
+        "id": "layout",
+        "label": "Screen Divider",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "horizontal",
+            "label": "Horizontal"
+          },
+          {
+            "value": "flip-horizontal",
+            "label": "Flip Horizontal"
+          },
+          {
+            "value": "vertical",
+            "label": "Vertical"
+          }, {
+            "value": "flip-vertical",
+            "label": "Flip Vertical"
+          }, {
+            "value": "diagonal",
+            "label": "Diagonal"
+          }, {
+            "value": "flip-diagonal",
+            "label": "Flip Diagonal"
+          }, {
+            "value": "transfer-diagonal",
+            "label": "Traverse Diagonal"
+          }, {
+            "value": "flip-transfer-diagonal",
+            "label": "Flip Traverse Diagonal"
+          }
+        ],
+        "default": "none"
+      }, {
+        "label": "Background Image",
+        "id": "background",
+        "type": "image_picker"
+      }, 
+      // {
+      //   "type": "font_picker",
+      //   "id": "font_family",
+      //   "label": "Font Family",
+      //   "default": "akko_n5"
+      // }, 
+      {
+        "label": "Header",
+        "id": "header_text",
+        "type": "text",
+        "default": "We are soon opening our doors to serve you"
+      }, {
+        "label": "Pre Header",
+        "id": "subheader_text",
+        "type": "text",
+        "default": "Enter SubHeader"
+      }, {
+        "label": "Tag Line",
+        "id": "cta_tag_text",
+        "type": "text",
+        "default": "We are soon opening our doors to serve you"
+      }, {
+        "label": "Email Placeholder Text",
+        "type": "text",
+        "id": "email_text",
+        "default": "Enter your email"
+      }, {
+        "label": "Phone Placeholder Text",
+        "type": "text",
+        "id": "phone_text",
+        "default": "Enter your phone number"
+      }, {
+        "label": "Button Text",
+        "id": "button_text",
+        "type": "text",
+        "default": "Enter"
+      }, {
+        "label": "Text Base Font Size",
+        "id": "base_font_size",
+        "type": "range",
+        "min": 24,
+        "max": 64,
+        "step": 1,
+        "unit": "px",
+        "default": 30
+      }, {
+        "type": "select",
+        "id": "text_layout",
+        "label": "Text Layout",
+        "options": [
+          {
+            "value": "center",
+            "label": "Center"
+          }, {
+            "value": "left",
+            "label": "Left"
+          }, {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "center"
+      }, {
+        "type": "page",
+        "id": "page",
+        "label": "Link to Page"
+      }
+    ]
+  }
+{% endschema %}

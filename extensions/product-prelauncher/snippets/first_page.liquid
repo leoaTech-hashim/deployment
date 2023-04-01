@@ -1,0 +1,350 @@
+<div class="section-layout {{ block.settings.layout }}">
+
+  <div id="snackbar">You have already signed up either from this email address or from the same IP</div>
+  <div id="snackbar2">Email is not valid</div>
+  <div id="snackbar3">Something went wrong</div>
+
+  {% if block.settings.layout == 'none' %}
+    <div id='background-image' class="none-layout none-parent-container">
+      <div class="subheader_text">{{ block.settings.subheader_text }}</div>
+      <div class="header_text">{{ block.settings.header_text }}</div>
+      <div class="none">
+        <div class="spaced">
+          <div class="tag-line">{{ block.settings.cta_tag_text }}</div>
+          <form
+            action='/apps/xychrosupdated/api/getuser'
+            id="form-submission"
+            class="first-page-form">
+            <input
+              type="email"
+              required
+              id="email"
+              name="email"
+              placeholder="{{ block.settings.email_text }}"
+              class='email-input-product-prelaucher' />
+            {% if block.settings.phone_text != '' %}
+              <input
+                type="tel"
+                required
+                id="phone"
+                name="phone"
+                placeholder="{{ block.settings.phone_text }}"
+                class='phone-input-product-prelaucher' />
+            {% endif %}
+            <input
+              type="submit"
+              value="{{ block.settings.button_text }}"
+              class="button submit-button submit-button-product-prelaunch" />
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if block.settings.layout == 'horizontal' %}
+    <div id='background-image' class="img-layout three-fourth">
+      <div class="subheader_text">{{ block.settings.subheader_text }}</div>
+      <div class="header_text">{{ block.settings.header_text }}</div>
+    </div>
+    <div class="text-layout one-fourth">
+      <div class="spaced">
+        <div class="tag-line">{{ block.settings.cta_tag_text }}</div>
+        <form
+          action='/apps/xychrosupdated/api/getuser'
+          id="form-submission"
+          class="first-page-form">
+          <input
+            type="email"
+            required
+            id="email"
+            name="email"
+            placeholder="{{ block.settings.email_text }}"
+            class='email-input-product-prelaucher' />
+          {% if block.settings.phone_text != '' %}
+            <input
+              type="tel"
+              required
+              id="phone"
+              name="phone"
+              placeholder="{{ block.settings.phone_text }}"
+              class='phone-input-product-prelaucher' />{% endif %}
+          <input
+            type="submit"
+            value="{{ block.settings.button_text }}"
+            class="button submit-button submit-button-product-prelaunch" />
+        </form>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if block.settings.layout == 'flip-horizontal' %}
+    <div class="text-layout flip-one-fourth">
+      <div class="spaced">
+        <div class="tag-line">{{ block.settings.cta_tag_text }}</div>
+        <form
+          action='/apps/xychrosupdated/api/getuser'
+          id="form-submission"
+          class="first-page-form">
+          <input
+            type="email"
+            required
+            id="email"
+            name="email"
+            placeholder="{{ block.settings.email_text }}"
+            class='email-input-product-prelaucher' />
+          {% if block.settings.phone_text != '' %}
+            <input
+              type="tel"
+              required
+              id="phone"
+              name="phone"
+              placeholder="{{ block.settings.phone_text }}"
+              class='phone-input-product-prelaucher' />
+          {% endif %}
+          <input
+            type="submit"
+            value="{{ block.settings.button_text }}"
+            class="button submit-button submit-button-product-prelaunch" />
+        </form>
+      </div>
+    </div>
+    <div id='background-image' class="img-layout flip-three-fourth">
+      <div class="subheader_text">{{ block.settings.subheader_text }}</div>
+      <div class="header_text">{{ block.settings.header_text }}</div>
+    </div>
+  {% endif %}
+
+  {% if block.settings.layout == 'vertical' %}
+    <div id='background-image' class="img-layout half">
+      <div class="hidden">this div is hidden</div>
+    </div>
+    <div class="text-layout spaced-evenly">
+      <div class="spaced vertical-mobile">
+        <div class="subheader_text">{{ block.settings.subheader_text }}</div>
+        <div class="header_text">{{ block.settings.header_text }}</div>
+      </div>
+      <div class="spaced vertical-mobile-two">
+        <div class="tag-line">{{ block.settings.cta_tag_text }}</div>
+        <form
+          action='/apps/xychrosupdated/api/getuser'
+          id="form-submission"
+          class="first-page-form">
+          <input
+            type="email"
+            required
+            id="email"
+            name="email"
+            placeholder="{{ block.settings.email_text }}"
+            class='email-input-product-prelaucher' />
+          {% if block.settings.phone_text != '' %}
+            <input
+              type="tel"
+              required
+              id="phone"
+              name="phone"
+              placeholder="{{ block.settings.phone_text }}"
+              class='phone-input-product-prelaucher' />{% endif %}
+          <input
+            type="submit"
+            value="{{ block.settings.button_text }}"
+            class="button submit-button submit-button-product-prelaunch" />
+        </form>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if block.settings.layout == 'flip-vertical' %}
+    <div class="text-layout flip-spaced-evenly">
+      <div class="spaced flip-vertical-mobile">
+        <div class="subheader_text">{{ block.settings.subheader_text }}</div>
+        <div class="header_text">{{ block.settings.header_text }}</div>
+      </div>
+      <div class="spaced flip-vertical-mobile-two">
+        <div class="tag-line">{{ block.settings.cta_tag_text }}</div>
+        <form
+          action='/apps/xychrosupdated/api/getuser'
+          id="form-submission"
+          class="first-page-form">
+          <input
+            type="email"
+            required
+            id="email"
+            name="email"
+            placeholder="{{ block.settings.email_text }}"
+            class='email-input-product-prelaucher' />
+          {% if block.settings.phone_text != '' %}
+            <input
+              type="tel"
+              required
+              id="phone"
+              name="phone"
+              placeholder="{{ block.settings.phone_text }}"
+              class='phone-input-product-prelaucher' />{% endif %}
+          <input
+            type="submit"
+            value="{{ block.settings.button_text }}"
+            class="button submit-button submit-button-product-prelaunch" />
+        </form>
+      </div>
+    </div>
+    <div id='background-image' class="img-layout flip-half">
+      <div class="hidden">this div is hidden</div>
+    </div>
+  {% endif %}
+
+  {% if block.settings.layout == 'diagonal' %}
+    <div id='background-image' class="img-layout diagonal-background">
+      <div class="hidden">this div is hidden</div>
+    </div>
+    <div class="text-layout lower-triangular">
+      <div class="spaced">
+        <div class="subheader_text">{{ block.settings.subheader_text }}</div>
+        <div class="header_text">{{ block.settings.header_text }}</div>
+      </div>
+      <div class="spaced">
+        <div class="tag-line">{{ block.settings.cta_tag_text }}</div>
+        <form
+          action='/apps/xychrosupdated/api/getuser'
+          id="form-submission"
+          class="first-page-form">
+          <input
+            type="email"
+            required
+            id="email"
+            name="email"
+            placeholder="{{ block.settings.email_text }}"
+            class='email-input-product-prelaucher' />
+          {% if block.settings.phone_text != '' %}
+            <input
+              type="tel"
+              required
+              id="phone"
+              name="phone"
+              placeholder="{{ block.settings.phone_text }}"
+              class='phone-input-product-prelaucher' />{% endif %}
+          <input
+            type="submit"
+            value="{{ block.settings.button_text }}"
+            class="button submit-button submit-button-product-prelaunch" />
+        </form>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if block.settings.layout == 'flip-diagonal' %}
+    <div id='background-image' class="img-layout flip-background">
+      <div class="hidden">this div is hidden</div>
+    </div>
+    <div class="text-layout flip-lower-triangular">
+      <div class="spaced">
+        <div class="subheader_text">{{ block.settings.subheader_text }}</div>
+        <div class="header_text">{{ block.settings.header_text }}</div>
+      </div>
+      <div class="spaced">
+        <div class="tag-line">{{ block.settings.cta_tag_text }}</div>
+        <form
+          action='/apps/xychrosupdated/api/getuser'
+          id="form-submission"
+          class="first-page-form">
+          <input
+            type="email"
+            required
+            id="email"
+            name="email"
+            placeholder="{{ block.settings.email_text }}"
+            class='email-input-product-prelaucher' />
+          {% if block.settings.phone_text != '' %}
+            <input
+              type="tel"
+              required
+              id="phone"
+              name="phone"
+              placeholder="{{ block.settings.phone_text }}"
+              class='phone-input-product-prelaucher' />{% endif %}
+          <input
+            type="submit"
+            value="{{ block.settings.button_text }}"
+            class="button submit-button submit-button-product-prelaunch" />
+        </form>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if block.settings.layout == 'transfer-diagonal' %}
+    <div id='background-image' class="img-layout transfer-diagonal-background">
+      <div class="hidden">this div is hidden</div>
+    </div>
+    <div class="text-layout transfer-lower-triangular">
+      <div class="spaced">
+        <div class="subheader_text">{{ block.settings.subheader_text }}</div>
+        <div class="header_text">{{ block.settings.header_text }}</div>
+      </div>
+      <div class="spaced">
+        <div class="tag-line">{{ block.settings.cta_tag_text }}</div>
+        <form
+          action='/apps/xychrosupdated/api/getuser'
+          id="form-submission"
+          class="first-page-form">
+          <input
+            type="email"
+            required
+            id="email"
+            name="email"
+            placeholder="{{ block.settings.email_text }}"
+            class='email-input-product-prelaucher' />
+          {% if block.settings.phone_text != '' %}
+            <input
+              type="tel"
+              required
+              id="phone"
+              name="phone"
+              placeholder="{{ block.settings.phone_text }}"
+              class='phone-input-product-prelaucher' />{% endif %}
+          <input
+            type="submit"
+            value="{{ block.settings.button_text }}"
+            class="button submit-button submit-button-product-prelaunch" />
+        </form>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if block.settings.layout == 'flip-transfer-diagonal' %}
+    <div id='background-image' class="img-layout flip-transfer-diagonal-background">
+      <div class="hidden">this div is hidden</div>
+    </div>
+    <div class="text-layout flip-transfer-lower-triangular">
+      <div class="spaced">
+        <div class="subheader_text">{{ block.settings.subheader_text }}</div>
+        <div class="header_text">{{ block.settings.header_text }}</div>
+      </div>
+      <div class="spaced">
+        <div class="tag-line">{{ block.settings.cta_tag_text }}</div>
+        <form
+          action='/apps/xychrosupdated/api/getuser'
+          id="form-submission"
+          class="first-page-form">
+          <input
+            type="email"
+            required
+            id="email"
+            name="email"
+            placeholder="{{ block.settings.email_text }}"
+            class='email-input-product-prelaucher' />
+          {% if block.settings.phone_text != '' %}
+            <input
+              type="tel"
+              required
+              id="phone"
+              name="phone"
+              placeholder="{{ block.settings.phone_text }}"
+              class='phone-input-product-prelaucher' />{% endif %}
+          <input
+            type="submit"
+            value="{{ block.settings.button_text }}"
+            class="button submit-button submit-button-product-prelaunch" />
+        </form>
+      </div>
+    </div>
+  {% endif %}
+</div>
