@@ -1,25 +1,29 @@
-import { Shopify } from '@shopify/shopify-api';
-
-import NewPool from 'pg';
+import { Shopify } from "@shopify/shopify-api";
+import * as dotenv from "dotenv";
+dotenv.config();
+import NewPool from "pg";
 const { Pool } = NewPool;
 const pool = new Pool({
-  connectionString: 'postgres://postgres:postgres@localhost:5432/prelauncher',
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 pool.connect((err, result) => {
   if (err) throw err;
-  console.log('Connected');
+  console.log("Connected");
 });
 
 export default function templatesApiEndpoints(app) {
   //read all campaign
 
-  app.get('/api/templates', async (req, res) => {
+  app.get("/api/templates", async (req, res) => {
     try {
       const session = await Shopify.Utils.loadCurrentSession(
         req,
         res,
-        app.get('use-online-tokens')
+        app.get("use-online-tokens")
       );
 
       const reward_page = await pool.query(

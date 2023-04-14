@@ -1,14 +1,19 @@
-import { Shopify } from '@shopify/shopify-api';
+import { Shopify } from "@shopify/shopify-api";
 
-import queryString from 'query-string';
-import crypto from 'crypto';
+import queryString from "query-string";
+import crypto from "crypto";
 //import { db } from '../prelauncherDB.js';
-import emailValidator from 'deep-email-validator';
+import emailValidator from "deep-email-validator";
+import * as dotenv from "dotenv";
+dotenv.config();
 
-import NewPool from 'pg';
+import NewPool from "pg";
 const { Pool } = NewPool;
 const pool = new Pool({
-  connectionString: 'postgres://postgres:postgres@localhost:5432/prelaunchdb',
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 import {
@@ -16,13 +21,13 @@ import {
   replace_referral_email_text,
   replace_reward_email_text,
   send_email,
-} from '../helpers/emails.js';
+} from "../helpers/emails.js";
 
 export default function referralsApiEndpoints(app, secret) {
   // endpoint to get users for Shopify Customers
   // Landing page API
-  app.post('/api/getuser', async (req, res) => {
-    console.log('In the data API block');
+  app.post("/api/getuser", async (req, res) => {
+    console.log("In the data API block");
     try {
       // const session = await Shopify.Utils.loadCurrentSession(
       //   req,
@@ -32,23 +37,23 @@ export default function referralsApiEndpoints(app, secret) {
 
       const query_signature = req.query.signature;
       let ip_address =
-        req.headers['x-forwarded-for'] || req.socket.remoteAddress || req.ip;
-      ip_address = ip_address.split(',')[0];
+        req.headers["x-forwarded-for"] || req.socket.remoteAddress || req.ip;
+      ip_address = ip_address.split(",")[0];
 
       console.log(ip_address);
       console.log(req.headers.referer);
       console.log(req.query);
 
       const { email, phone, refer, campaign, shop } = req.query;
-      let message = '';
+      let message = "";
 
       if (!email) {
         return res
           .status(400)
-          .json({ success: false, message: 'Please provide valid input' });
+          .json({ success: false, message: "Please provide valid input" });
       }
 
-      const shop_id = 'offline_' + shop;
+      const shop_id = "offline_" + shop;
 
       const campaign_details = await pool.query(
         `SELECT * from campaign_settings where name='${campaign}' and shop_id='${shop_id}'`
@@ -66,7 +71,7 @@ export default function referralsApiEndpoints(app, secret) {
       if (isemail_valid.validators.smtp.valid == false) {
         return res
           .status(404)
-          .json({ success: false, message: 'Please provide a valid email' });
+          .json({ success: false, message: "Please provide a valid email" });
       }
 
       // get referral code
@@ -75,7 +80,7 @@ export default function referralsApiEndpoints(app, secret) {
         `SELECT * FROM referrals where email='${email}' and campaign_id=${campaignID}`
       );
 
-      let referralcode = '';
+      let referralcode = "";
 
       if (users.rows[0]) {
         referralcode = users.rows[0].referral_code;
@@ -102,7 +107,7 @@ export default function referralsApiEndpoints(app, secret) {
 
             return res.status(400).json({
               success: false,
-              message: 'You have already requested 2 times',
+              message: "You have already requested 2 times",
             });
           } else {
             // if IP exists less than 2 times
@@ -116,7 +121,7 @@ export default function referralsApiEndpoints(app, secret) {
             );
 
             referralcode = getreferrals.rows[0].referral_code;
-            console.log('Testing till here');
+            console.log("Testing till here");
             //prepare welcome email
             message = await replace_welcome_email_text(
               welcome_message,
@@ -130,7 +135,7 @@ export default function referralsApiEndpoints(app, secret) {
             let send_message = await send_email(
               message,
               email,
-              'You have Subscribed'
+              "You have Subscribed"
             );
             console.log(send_message);
             //check referrer code and send reward unlock email or referral email
@@ -163,7 +168,7 @@ export default function referralsApiEndpoints(app, secret) {
           let send_message = await send_email(
             message,
             email,
-            'You have Subscribed'
+            "You have Subscribed"
           );
           //check referrer code and send reward unlock email or referral email
           let get_referrer = await find_referrer(refer, campaign_details, shop);
@@ -223,15 +228,15 @@ export default function referralsApiEndpoints(app, secret) {
   });
 
   // get customer information for Shopify FrontEnd
-  app.post('/api/get_referrals', async (req, res, next) => {
+  app.post("/api/get_referrals", async (req, res, next) => {
     try {
       const { referral_code, campaign_id } = req.body;
       const data = await pool.query(
-        'SELECT * FROM referrals WHERE referral_code=$1 and campaign_id=$2',
+        "SELECT * FROM referrals WHERE referral_code=$1 and campaign_id=$2",
         [referral_code, campaign_id]
       );
       const data_ = await pool.query(
-        'SELECT * FROM referrals WHERE referrer_id=$1',
+        "SELECT * FROM referrals WHERE referrer_id=$1",
         [data.rows[0].referral_code]
       );
       if (data_.rows.length > 0) {
@@ -242,7 +247,7 @@ export default function referralsApiEndpoints(app, secret) {
     } catch (error) {
       return res
         .status(500)
-        .json({ success: false, message: 'Something went wrong' });
+        .json({ success: false, message: "Something went wrong" });
     }
   });
 
@@ -268,20 +273,20 @@ export default function referralsApiEndpoints(app, secret) {
         await send_email(
           referral_email_text,
           referrer.rows[0].email,
-          'Friend has signed up'
+          "Friend has signed up"
         );
         let checker = null;
         if (total_referrals.rowCount == campaign.rows[0].reward_1_tier) {
-          checker = 'reward_1_tier';
+          checker = "reward_1_tier";
         } else if (total_referrals.rowCount == campaign.rows[0].reward_2_tier) {
-          checker = 'reward_2_tier';
+          checker = "reward_2_tier";
         } else if (total_referrals.rowCount == campaign.rows[0].reward_3_tier) {
-          checker = 'reward_3_tier';
+          checker = "reward_3_tier";
         } else if (total_referrals.rowCount == campaign.rows[0].reward_4_tier) {
-          checker = 'reward_4_tier';
+          checker = "reward_4_tier";
         }
         if (checker) {
-          if (checker == 'reward_1_tier') {
+          if (checker == "reward_1_tier") {
             reward_email_text = await replace_reward_email_text(
               reward_email_text,
               campaign,
@@ -290,7 +295,7 @@ export default function referralsApiEndpoints(app, secret) {
               total_referrals.rowCount,
               campaign.rows[0].reward_1_code
             );
-          } else if (checker == 'reward_2_tier') {
+          } else if (checker == "reward_2_tier") {
             reward_email_text = await replace_reward_email_text(
               reward_email_text,
               campaign,
@@ -299,7 +304,7 @@ export default function referralsApiEndpoints(app, secret) {
               total_referrals.rowCount,
               campaign.rows[0].reward_2_code
             );
-          } else if (checker == 'reward_3_tier') {
+          } else if (checker == "reward_3_tier") {
             reward_email_text = await replace_reward_email_text(
               reward_email_text,
               campaign,
@@ -308,7 +313,7 @@ export default function referralsApiEndpoints(app, secret) {
               total_referrals.rowCount,
               campaign.rows[0].reward_3_code
             );
-          } else if (checker == 'reward_4_tier') {
+          } else if (checker == "reward_4_tier") {
             reward_email_text = await replace_reward_email_text(
               reward_email_text,
               campaign,
@@ -321,7 +326,7 @@ export default function referralsApiEndpoints(app, secret) {
           await send_email(
             reward_email_text,
             referrer.rows[0].email,
-            'Reward Unlocked'
+            "Reward Unlocked"
           );
         }
       }

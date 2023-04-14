@@ -1,92 +1,94 @@
-import { Shopify } from '@shopify/shopify-api';
-import fetch from 'node-fetch';
+import { Shopify } from "@shopify/shopify-api";
+import fetch from "node-fetch";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 // import createApp from '@shopify/app-bridge';
 // import { getSessionToken } from '@shopify/app-bridge-utils';
 // import { assetForTheme } from '@shopify/koa-shopify-graphql-proxy';
 
-
-import NewPool from 'pg';
+import NewPool from "pg";
 const { Pool } = NewPool;
 const pool = new Pool({
-  connectionString: 'postgres://postgres:postgres@localhost:5432/prelauncher',
-
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 // api calls
 const admin_apis = async (accessToken) => {
-    const shopURL = 'sky2-dev.myshopify.com/';
-    const shopOrigin = `https://${shopURL}`
-    const headers = {
-        'X-Shopify-Access-Token': accessToken,
-        'Content-Type': 'application/json',
-    };
-
+  const shopURL = "sky2-dev.myshopify.com/";
+  const shopOrigin = `https://${shopURL}`;
+  const headers = {
+    "X-Shopify-Access-Token": accessToken,
+    "Content-Type": "application/json",
+  };
 
   const body1 = {
     sections: {
-      '16782598035f2c71dc': {
-        type: 'apps',
+      "16782598035f2c71dc": {
+        type: "apps",
         blocks: {
-          '1f56808c-7911-47a3-b9bd-a3d30ae5a1d9': {
-            type: 'shopify://apps/updated-xychros-app/blocks/firstPage/990d48eb-16d0-4af0-b902-f323ed2bbfab',
+          "1f56808c-7911-47a3-b9bd-a3d30ae5a1d9": {
+            type: "shopify://apps/updated-xychros-app/blocks/firstPage/990d48eb-16d0-4af0-b902-f323ed2bbfab",
             settings: {
               show_header_footer: true,
               background_color:
-                'linear-gradient(137deg, rgba(0, 0, 0, 0) 100%, rgba(167, 144, 140, 0) 100%)',
-              main_color: '#ffffff',
-              accent_color: '#000000',
-              layout: 'none',
-              background: 'shopify://shop_images/nature2.png',
-              header_text: 'Designing the Future',
-              subheader_text: '',
-              cta_tag_text: '',
-              email_text: 'Email',
-              phone_text: 'Phone Number',
-              button_text: 'Take me too!',
+                "linear-gradient(137deg, rgba(0, 0, 0, 0) 100%, rgba(167, 144, 140, 0) 100%)",
+              main_color: "#ffffff",
+              accent_color: "#000000",
+              layout: "none",
+              background: "shopify://shop_images/nature2.png",
+              header_text: "Designing the Future",
+              subheader_text: "",
+              cta_tag_text: "",
+              email_text: "Email",
+              phone_text: "Phone Number",
+              button_text: "Take me too!",
               base_font_size: 24,
-              text_layout: 'center',
-              page: '',
+              text_layout: "center",
+              page: "",
             },
           },
         },
-        block_order: ['1f56808c-7911-47a3-b9bd-a3d30ae5a1d9'],
+        block_order: ["1f56808c-7911-47a3-b9bd-a3d30ae5a1d9"],
         settings: {},
       },
     },
-    order: ['16782598035f2c71dc'],
+    order: ["16782598035f2c71dc"],
   };
 
   const body2 = {
     sections: {
-      '16798296089bba316e': {
-        type: 'apps',
+      "16798296089bba316e": {
+        type: "apps",
         blocks: {
-          '7efbe0eb-f9b3-4f16-af27-f262dbcc5fbc': {
-            type: 'shopify://apps/updated-xychros-app/blocks/secondPage/990d48eb-16d0-4af0-b902-f323ed2bbfab',
+          "7efbe0eb-f9b3-4f16-af27-f262dbcc5fbc": {
+            type: "shopify://apps/updated-xychros-app/blocks/secondPage/990d48eb-16d0-4af0-b902-f323ed2bbfab",
             settings: {
               show_header_footer: true,
               background_color:
-                'linear-gradient(137deg, rgba(0, 0, 0, 0) 100%, rgba(167, 144, 140, 0) 100%)',
-              main_color: '#ffffff',
-              accent_color: '#000000',
-              layout: 'nonehorizontal',
-              background: 'shopify://shop_images/nature2.png',
-              preheader_text: '',
-              header_text: 'Your Product',
+                "linear-gradient(137deg, rgba(0, 0, 0, 0) 100%, rgba(167, 144, 140, 0) 100%)",
+              main_color: "#ffffff",
+              accent_color: "#000000",
+              layout: "nonehorizontal",
+              background: "shopify://shop_images/nature2.png",
+              preheader_text: "",
+              header_text: "Your Product",
               subheader_text:
-                'Share your unique link via email, Facebook or Twitter and earn goodies for each friend who signs up!',
+                "Share your unique link via email, Facebook or Twitter and earn goodies for each friend who signs up!",
               base_font_size: 24,
-              text_layout: 'center',
-              icon_dropdown: 'image-9',
+              text_layout: "center",
+              icon_dropdown: "image-9",
             },
           },
         },
-        block_order: ['7efbe0eb-f9b3-4f16-af27-f262dbcc5fbc'],
+        block_order: ["7efbe0eb-f9b3-4f16-af27-f262dbcc5fbc"],
         settings: {},
       },
     },
-    order: ['16798296089bba316e'],
+    order: ["16798296089bba316e"],
   };
 
   // get active theme id
@@ -95,18 +97,18 @@ const admin_apis = async (accessToken) => {
       const response = await fetch(
         `https://${shopURL}/admin/api/2022-10/themes.json`,
         {
-          method: 'GET',
+          method: "GET",
           headers,
         }
       );
       const data = await response.json();
       const activeThemeId = data.themes.find(
-        (theme) => theme.role === 'main'
+        (theme) => theme.role === "main"
       ).id;
       if (activeThemeId) {
         return activeThemeId;
       } else {
-        console.log('Theme id not found');
+        console.log("Theme id not found");
       }
     } catch (error) {
       console.error(error);
@@ -115,14 +117,14 @@ const admin_apis = async (accessToken) => {
 
   // first template
   const createFirstPageTemplate = async (themeid) => {
-    const templateName = 'prelaunchTemplate';
+    const templateName = "prelaunchTemplate";
     const randomString = Math.random().toString(36).substring(2, 15); // generate random string
-    const uniqueTemplateName = templateName + '_' + randomString; // concatenate base name and random string
+    const uniqueTemplateName = templateName + "_" + randomString; // concatenate base name and random string
     try {
       const response = await fetch(
         `https://${shopURL}/admin/api/2022-10/themes/${themeid}/assets.json`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers,
           body: JSON.stringify({
             asset: {
@@ -146,14 +148,14 @@ const admin_apis = async (accessToken) => {
   // second template
 
   const createSecondPageTemplate = async (themeid) => {
-    const templateName = 'rewardsTemplate';
+    const templateName = "rewardsTemplate";
     const randomString = Math.random().toString(36).substring(2, 15); // generate random string
-    const uniqueTemplateName = templateName + '_' + randomString; // concatenate base name and random string
+    const uniqueTemplateName = templateName + "_" + randomString; // concatenate base name and random string
     try {
       const response = await fetch(
         `https://${shopURL}/admin/api/2022-10/themes/${themeid}/assets.json`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers,
           body: JSON.stringify({
             asset: {
@@ -177,9 +179,9 @@ const admin_apis = async (accessToken) => {
   // first page
 
   const createFirstPage = async (templateSuffix) => {
-    const pageName = 'prelaunchPage';
+    const pageName = "prelaunchPage";
     const randomString = Math.random().toString(36).substring(2, 15); // generate random string
-    const uniquePageeName = pageName + '_' + randomString; // concatenate base name and random string
+    const uniquePageeName = pageName + "_" + randomString; // concatenate base name and random string
     const pageBody = JSON.stringify({
       page: {
         title: `${uniquePageeName}`,
@@ -191,7 +193,7 @@ const admin_apis = async (accessToken) => {
       const response = await fetch(
         `https://${shopURL}/admin/api/2023-01/pages.json`,
         {
-          method: 'POST',
+          method: "POST",
           headers,
           body: pageBody,
         }
@@ -207,9 +209,9 @@ const admin_apis = async (accessToken) => {
   // second page
 
   const createSecondPage = async (templateSuffix) => {
-    const pageName = 'rewardsPage';
+    const pageName = "rewardsPage";
     const randomString = Math.random().toString(36).substring(2, 15); // generate random string
-    const uniquePageeName = pageName + '_' + randomString; // concatenate base name and random string
+    const uniquePageeName = pageName + "_" + randomString; // concatenate base name and random string
     const pageBody = JSON.stringify({
       page: {
         title: `${uniquePageeName}`,
@@ -221,7 +223,7 @@ const admin_apis = async (accessToken) => {
       const response = await fetch(
         `https://${shopURL}/admin/api/2023-01/pages.json`,
         {
-          method: 'POST',
+          method: "POST",
           headers,
           body: pageBody,
         }
@@ -239,42 +241,42 @@ const admin_apis = async (accessToken) => {
   const updateFirstPageTemplate = async (templateSuffix, pagehandle) => {
     const body = {
       sections: {
-        '16782598035f2c71dc': {
-          type: 'apps',
+        "16782598035f2c71dc": {
+          type: "apps",
           blocks: {
-            '1f56808c-7911-47a3-b9bd-a3d30ae5a1d9': {
-              type: 'shopify://apps/updated-xychros-app/blocks/firstPage/990d48eb-16d0-4af0-b902-f323ed2bbfab',
+            "1f56808c-7911-47a3-b9bd-a3d30ae5a1d9": {
+              type: "shopify://apps/updated-xychros-app/blocks/firstPage/990d48eb-16d0-4af0-b902-f323ed2bbfab",
               settings: {
                 show_header_footer: true,
                 background_color:
-                  'linear-gradient(137deg, rgba(0, 0, 0, 0) 100%, rgba(167, 144, 140, 0) 100%)',
-                main_color: '#ffffff',
-                accent_color: '#000000',
-                layout: 'none',
-                background: 'shopify://shop_images/nature2.png',
-                header_text: 'Designing the Future',
-                subheader_text: '',
-                cta_tag_text: '',
-                email_text: 'Email',
-                phone_text: 'Phone Number',
-                button_text: 'Take me too!',
+                  "linear-gradient(137deg, rgba(0, 0, 0, 0) 100%, rgba(167, 144, 140, 0) 100%)",
+                main_color: "#ffffff",
+                accent_color: "#000000",
+                layout: "none",
+                background: "shopify://shop_images/nature2.png",
+                header_text: "Designing the Future",
+                subheader_text: "",
+                cta_tag_text: "",
+                email_text: "Email",
+                phone_text: "Phone Number",
+                button_text: "Take me too!",
                 base_font_size: 24,
-                text_layout: 'center',
+                text_layout: "center",
                 page: `${pagehandle}`,
               },
             },
           },
-          block_order: ['1f56808c-7911-47a3-b9bd-a3d30ae5a1d9'],
+          block_order: ["1f56808c-7911-47a3-b9bd-a3d30ae5a1d9"],
           settings: {},
         },
       },
-      order: ['16782598035f2c71dc'],
+      order: ["16782598035f2c71dc"],
     };
     try {
       const response = await fetch(
         `https://${shopURL}/admin/api/2022-10/themes/${themeid}/assets.json`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers,
           body: JSON.stringify({
             asset: {
@@ -285,7 +287,7 @@ const admin_apis = async (accessToken) => {
         }
       );
       const data = await response.json();
-      console.log('Updated template with page handle');
+      console.log("Updated template with page handle");
       if (!response.ok) {
         throw new Error(`Failed to update page template: ${data.errors}`);
       }
@@ -300,41 +302,41 @@ const admin_apis = async (accessToken) => {
   const updateSecondPageTemplate = async (templateSuffix, pagehandle) => {
     const body = {
       sections: {
-        '16798296089bba316e': {
-          type: 'apps',
+        "16798296089bba316e": {
+          type: "apps",
           blocks: {
-            '7efbe0eb-f9b3-4f16-af27-f262dbcc5fbc': {
-              type: 'shopify://apps/updated-xychros-app/blocks/secondPage/990d48eb-16d0-4af0-b902-f323ed2bbfab',
+            "7efbe0eb-f9b3-4f16-af27-f262dbcc5fbc": {
+              type: "shopify://apps/updated-xychros-app/blocks/secondPage/990d48eb-16d0-4af0-b902-f323ed2bbfab",
               settings: {
                 show_header_footer: true,
                 background_color:
-                  'linear-gradient(137deg, rgba(0, 0, 0, 0) 100%, rgba(167, 144, 140, 0) 100%)',
-                main_color: '#ffffff',
-                accent_color: '#000000',
-                layout: 'nonehorizontal',
-                background: 'shopify://shop_images/nature2.png',
-                preheader_text: '',
-                header_text: 'Your Product',
+                  "linear-gradient(137deg, rgba(0, 0, 0, 0) 100%, rgba(167, 144, 140, 0) 100%)",
+                main_color: "#ffffff",
+                accent_color: "#000000",
+                layout: "nonehorizontal",
+                background: "shopify://shop_images/nature2.png",
+                preheader_text: "",
+                header_text: "Your Product",
                 subheader_text:
-                  'Share your unique link via email, Facebook or Twitter and earn goodies for each friend who signs up!',
+                  "Share your unique link via email, Facebook or Twitter and earn goodies for each friend who signs up!",
                 base_font_size: 24,
-                text_layout: 'center',
-                icon_dropdown: 'image-9',
+                text_layout: "center",
+                icon_dropdown: "image-9",
                 page: `${pagehandle}`,
               },
             },
           },
-          block_order: ['7efbe0eb-f9b3-4f16-af27-f262dbcc5fbc'],
+          block_order: ["7efbe0eb-f9b3-4f16-af27-f262dbcc5fbc"],
           settings: {},
         },
       },
-      order: ['16798296089bba316e'],
+      order: ["16798296089bba316e"],
     };
     try {
       const response = await fetch(
         `https://${shopURL}/admin/api/2022-10/themes/${themeid}/assets.json`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers,
           body: JSON.stringify({
             asset: {
@@ -345,7 +347,7 @@ const admin_apis = async (accessToken) => {
         }
       );
       const data = await response.json();
-      console.log('Updated template with page handle');
+      console.log("Updated template with page handle");
       if (!response.ok) {
         throw new Error(`Failed to update page template: ${data.errors}`);
       }
@@ -362,8 +364,8 @@ const admin_apis = async (accessToken) => {
   const template2 = await createSecondPageTemplate(themeid);
 
   // retrieve the name of the created template from the response
-  const templateSuffix1 = await template1.asset.key.split('/')[1].split('.')[1];
-  const templateSuffix2 = await template2.asset.key.split('/')[1].split('.')[1];
+  const templateSuffix1 = await template1.asset.key.split("/")[1].split(".")[1];
+  const templateSuffix2 = await template2.asset.key.split("/")[1].split(".")[1];
 
   // retrive page handles
   const firstpage = await createFirstPage(templateSuffix1);
@@ -378,16 +380,16 @@ const admin_apis = async (accessToken) => {
 // --------------------------------------- TEMPLATE API ------------------------------------
 
 export default function create_template(app) {
-  app.get('/api/create_template', async (req, res) => {
+  app.get("/api/create_template", async (req, res) => {
     try {
       const session = await Shopify.Utils.loadCurrentSession(
         req,
         res,
-        app.get('use-online-tokens')
+        app.get("use-online-tokens")
       );
       const { shop } = session;
       const data = await pool.query(
-        'SELECT accesstoken FROM shopify_sessions WHERE shop=$1',
+        "SELECT accesstoken FROM shopify_sessions WHERE shop=$1",
         [shop]
       );
 
@@ -399,13 +401,13 @@ export default function create_template(app) {
       } else {
         return res
           .status(404)
-          .json({ success: false, message: 'Access token not found' });
+          .json({ success: false, message: "Access token not found" });
       }
     } catch (err) {
       console.log(err);
       return res
         .status(500)
-        .json({ success: false, message: 'Something went wrong' });
+        .json({ success: false, message: "Something went wrong" });
     }
   });
 }

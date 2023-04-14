@@ -2,9 +2,14 @@ import { Shopify } from "@shopify/shopify-api";
 
 //import { db } from '../prelauncherDB.js';
 import NewPool from "pg";
+import * as dotenv from "dotenv";
+dotenv.config();
 const { Pool } = NewPool;
 const pool = new Pool({
-  connectionString: "postgres://postgres:postgres@localhost:5432/prelaunchdb",
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 pool.connect((err, result) => {
@@ -24,7 +29,8 @@ export default function globalSettingsApiEndPoint(app) {
       );
 
       const findSettings = await pool.query(
-        `select * from global_settings where id = $1 `,[1]
+        `select * from global_settings where id = $1 `,
+        [1]
         // ,
         // [session?.id]
       );
@@ -37,7 +43,7 @@ export default function globalSettingsApiEndPoint(app) {
   });
 
   // Insert new settings
- /*  app.post("/api/updatesettings", async (req, res) => {
+  /*  app.post("/api/updatesettings", async (req, res) => {
     try {
       const session = await Shopify.Utils.loadCurrentSession(
         req,
